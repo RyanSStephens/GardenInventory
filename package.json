@@ -1,7 +1,7 @@
 {
   "name": "garden-inventory",
   "version": "1.0.0",
-  "description": "A comprehensive garden inventory management system",
+  "description": "A comprehensive garden inventory management system for tracking plants, supplies, and harvests",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
