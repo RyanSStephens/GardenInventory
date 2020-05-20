@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden Inventory</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>🌱 Garden Inventory</h1>
+        <nav>
+            <ul>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#plants">Plants</a></li>
+                <li><a href="#inventory">Inventory</a></li>
+                <li><a href="#harvests">Harvests</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="dashboard" class="active">
+            <h2>Dashboard</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Plants</h3>
+                    <span class="stat-number" id="total-plants">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Growing</h3>
+                    <span class="stat-number" id="active-plants">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Harvests This Month</h3>
+                    <span class="stat-number" id="monthly-harvests">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Inventory Items</h3>
+                    <span class="stat-number" id="inventory-count">0</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="plants">
+            <h2>Plant Management</h2>
+            <button class="btn-primary" onclick="showAddPlantForm()">Add New Plant</button>
+            <div id="plants-list"></div>
+        </section>
+
+        <section id="inventory">
+            <h2>Inventory Management</h2>
+            <button class="btn-primary" onclick="showAddInventoryForm()">Add Inventory Item</button>
+            <div id="inventory-list"></div>
+        </section>
+
+        <section id="harvests">
+            <h2>Harvest Records</h2>
+            <button class="btn-primary" onclick="showAddHarvestForm()">Record Harvest</button>
+            <div id="harvests-list"></div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html> 
