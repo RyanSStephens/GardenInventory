@@ -118,25 +118,16 @@ plantSchema.index({ plantedDate: -1 });
 plantSchema.index({ expectedHarvestDate: 1 });
 plantSchema.index({ location: 1 });
 
-// Pre-save middleware
+// Custom validation for planting date
 plantSchema.pre('save', function(next) {
   if (this.plantingDate && this.plantingDate > new Date()) {
     return next(new Error('Planting date cannot be in the future'));
   }
   
-  // Bug: This will prevent updating existing plants
-  if (this.expectedHarvestDate && this.expectedHarvestDate < this.plantingDate) {
+  // Fixed: Only validate if both dates exist
+  if (this.expectedHarvestDate && this.plantingDate && 
+      this.expectedHarvestDate < this.plantingDate) {
     return next(new Error('Expected harvest date must be after planting date'));
-  }
-  
-  // Auto-update status based on harvest date
-  if (this.harvestDate && this.status !== 'harvested') {
-    this.status = 'harvested';
-  }
-  
-  // Ensure consistent data
-  if (this.status === 'failed' || this.status === 'harvested') {
-    this.isActive = false;
   }
   
   next();
