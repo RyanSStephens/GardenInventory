@@ -120,6 +120,15 @@ plantSchema.index({ location: 1 });
 
 // Pre-save middleware
 plantSchema.pre('save', function(next) {
+  if (this.plantingDate && this.plantingDate > new Date()) {
+    return next(new Error('Planting date cannot be in the future'));
+  }
+  
+  // Bug: This will prevent updating existing plants
+  if (this.expectedHarvestDate && this.expectedHarvestDate < this.plantingDate) {
+    return next(new Error('Expected harvest date must be after planting date'));
+  }
+  
   // Auto-update status based on harvest date
   if (this.harvestDate && this.status !== 'harvested') {
     this.status = 'harvested';
