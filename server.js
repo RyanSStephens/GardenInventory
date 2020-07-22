@@ -23,6 +23,11 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
+// Import routes
+const plantRoutes = require('./routes/plants');
+const inventoryRoutes = require('./routes/inventory');
+const harvestRoutes = require('./routes/harvests');
+
 // Routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -31,6 +36,11 @@ app.get('/', (req, res) => {
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
+
+// API Routes
+app.use('/api/plants', plantRoutes);
+app.use('/api/inventory', inventoryRoutes);
+app.use('/api/harvests', harvestRoutes);
 
 app.listen(PORT, () => {
   console.log(`Garden Inventory server running on port ${PORT}`);
