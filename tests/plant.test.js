@@ -28,14 +28,14 @@ describe('Plant API', () => {
           variety: 'Cherry',
           category: 'vegetables',
           location: 'Garden Bed A',
-          plantedDate: new Date('2023-03-01')
+          plantedDate: new Date('2020-03-01')
         },
         {
           name: 'Basil',
           variety: 'Sweet',
           category: 'herbs',
           location: 'Herb Garden',
-          plantedDate: new Date('2023-03-15')
+          plantedDate: new Date('2020-03-15')
         }
       ];
 
@@ -56,13 +56,13 @@ describe('Plant API', () => {
           name: 'Tomato',
           category: 'vegetables',
           location: 'Garden',
-          plantedDate: new Date()
+          plantedDate: new Date('2020-03-01')
         },
         {
           name: 'Basil',
           category: 'herbs',
           location: 'Garden',
-          plantedDate: new Date()
+          plantedDate: new Date('2020-03-15')
         }
       ];
 
@@ -83,14 +83,14 @@ describe('Plant API', () => {
           category: 'vegetables',
           status: 'growing',
           location: 'Garden',
-          plantedDate: new Date()
+          plantedDate: new Date('2020-03-01')
         },
         {
           name: 'Basil',
           category: 'herbs',
           status: 'harvested',
           location: 'Garden',
-          plantedDate: new Date()
+          plantedDate: new Date('2020-03-15')
         }
       ];
 
@@ -112,8 +112,8 @@ describe('Plant API', () => {
         variety: 'Romaine',
         category: 'vegetables',
         location: 'Garden Bed B',
-        plantedDate: '2023-03-01',
-        expectedHarvestDate: '2023-04-15',
+        plantedDate: '2020-03-01',
+        expectedHarvestDate: '2020-04-15',
         notes: 'First planting of the season'
       };
 
@@ -146,7 +146,7 @@ describe('Plant API', () => {
         name: 'Test Plant',
         category: 'invalid-category',
         location: 'Garden',
-        plantedDate: new Date()
+        plantedDate: new Date('2020-03-01')
       };
 
       const response = await request(app)
@@ -158,7 +158,7 @@ describe('Plant API', () => {
     });
 
     it('should validate planted date is not in future', async () => {
-      const futureDate = new Date();
+      const futureDate = new Date('2020-03-01');
       futureDate.setDate(futureDate.getDate() + 10);
 
       const plantData = {
@@ -183,7 +183,7 @@ describe('Plant API', () => {
         name: 'Carrot',
         category: 'vegetables',
         location: 'Garden',
-        plantedDate: new Date()
+        plantedDate: new Date('2020-03-01')
       });
       await plant.save();
 
@@ -220,13 +220,18 @@ describe('Plant API', () => {
         name: 'Pepper',
         category: 'vegetables',
         location: 'Garden',
-        plantedDate: new Date()
+        plantedDate: new Date('2020-03-01')
       });
       await plant.save();
 
       const updateData = {
-        status: 'growing',
-        notes: 'Plants are doing well'
+        name: 'Updated Tomato',
+        variety: 'Beefsteak',
+        category: 'vegetable',
+        plantedDate: '2020-03-01',
+        expectedHarvestDate: '2020-04-15',
+        location: 'Updated Location',
+        status: 'growing'
       };
 
       const response = await request(app)
@@ -244,12 +249,12 @@ describe('Plant API', () => {
         name: 'Cucumber',
         category: 'vegetables',
         location: 'Garden',
-        plantedDate: new Date()
+        plantedDate: new Date('2020-03-01')
       });
       await plant.save();
 
       const updateData = {
-        harvestDate: new Date()
+        harvestDate: new Date('2020-03-15')
       };
 
       const response = await request(app)
@@ -268,7 +273,7 @@ describe('Plant API', () => {
         name: 'Spinach',
         category: 'vegetables',
         location: 'Garden',
-        plantedDate: new Date()
+        plantedDate: new Date('2020-03-01')
       });
       await plant.save();
 
@@ -285,7 +290,7 @@ describe('Plant API', () => {
 
   describe('Plant Model Methods', () => {
     it('should calculate days since planted correctly', async () => {
-      const plantedDate = new Date();
+      const plantedDate = new Date('2020-03-01');
       plantedDate.setDate(plantedDate.getDate() - 10);
 
       const plant = new Plant({
@@ -299,14 +304,14 @@ describe('Plant API', () => {
     });
 
     it('should calculate days until harvest correctly', async () => {
-      const expectedHarvestDate = new Date();
+      const expectedHarvestDate = new Date('2020-03-15');
       expectedHarvestDate.setDate(expectedHarvestDate.getDate() + 15);
 
       const plant = new Plant({
         name: 'Test Plant',
         category: 'vegetables',
         location: 'Garden',
-        plantedDate: new Date(),
+        plantedDate: new Date('2020-03-01'),
         expectedHarvestDate
       });
 
@@ -314,10 +319,10 @@ describe('Plant API', () => {
     });
 
     it('should calculate growth progress correctly', async () => {
-      const plantedDate = new Date();
+      const plantedDate = new Date('2020-03-01');
       plantedDate.setDate(plantedDate.getDate() - 30);
       
-      const expectedHarvestDate = new Date();
+      const expectedHarvestDate = new Date('2020-03-15');
       expectedHarvestDate.setDate(expectedHarvestDate.getDate() + 30);
 
       const plant = new Plant({
@@ -336,7 +341,7 @@ describe('Plant API', () => {
         name: 'Test Plant',
         category: 'vegetables',
         location: 'Garden',
-        plantedDate: new Date()
+        plantedDate: new Date('2020-03-01')
       });
       await plant.save();
 
@@ -355,14 +360,14 @@ describe('Plant API', () => {
           name: 'Active Plant 1',
           category: 'vegetables',
           location: 'Garden',
-          plantedDate: new Date(),
+          plantedDate: new Date('2020-03-01'),
           isActive: true
         },
         {
           name: 'Inactive Plant',
           category: 'vegetables',
           location: 'Garden',
-          plantedDate: new Date(),
+          plantedDate: new Date('2020-03-15'),
           status: 'harvested',
           isActive: false
         },
@@ -370,7 +375,7 @@ describe('Plant API', () => {
           name: 'Active Plant 2',
           category: 'herbs',
           location: 'Garden',
-          plantedDate: new Date(),
+          plantedDate: new Date('2020-03-01'),
           isActive: true
         }
       ];
@@ -389,14 +394,14 @@ describe('Plant API', () => {
     });
 
     it('should get harvest ready plants', async () => {
-      const pastDate = new Date();
+      const pastDate = new Date('2020-03-15');
       pastDate.setDate(pastDate.getDate() - 5);
 
       await Plant.create({
         name: 'Ready Plant',
         category: 'vegetables',
         location: 'Garden',
-        plantedDate: new Date(),
+        plantedDate: new Date('2020-03-01'),
         expectedHarvestDate: pastDate,
         isActive: true
       });
