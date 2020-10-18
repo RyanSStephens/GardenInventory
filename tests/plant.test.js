@@ -406,4 +406,113 @@ describe('Plant API', () => {
       expect(readyPlants[0].name).toBe('Ready Plant');
     });
   });
+
+  describe('Plant API Edge Cases', () => {
+    test('should handle invalid ObjectId format', async () => {
+      const response = await request(app)
+        .get('/api/plants/invalid-id')
+        .expect(400);
+      
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error).toContain('Invalid plant ID format');
+    });
+
+    test('should handle non-existent plant ID', async () => {
+      const nonExistentId = new mongoose.Types.ObjectId();
+      const response = await request(app)
+        .get(`/api/plants/${nonExistentId}`)
+        .expect(404);
+      
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error).toBe('Plant not found');
+    });
+
+    test('should validate required fields on creation', async () => {
+      const response = await request(app)
+        .post('/api/plants')
+        .send({})
+        .expect(400);
+      
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error).toContain('name');
+    });
+
+    test('should handle duplicate plant names gracefully', async () => {
+      const plantData = {
+        name: 'Duplicate Test Plant',
+        variety: 'Test Variety',
+        category: 'vegetable'
+      };
+
+      // Create first plant
+      await request(app)
+        .post('/api/plants')
+        .send(plantData)
+        .expect(201);
+
+      // Try to create duplicate
+      const response = await request(app)
+        .post('/api/plants')
+        .send(plantData)
+        .expect(409);
+      
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error).toContain('already exists');
+    });
+  });
+
+  describe('Plant Status Transitions', () => {
+    let plantId;
+
+    beforeEach(async () => {
+      const plantData = {
+        name: 'Status Test Plant',
+        variety: 'Test Variety',
+        category: 'vegetable',
+        status: 'planted'
+      };
+
+      const response = await request(app)
+        .post('/api/plants')
+        .send(plantData)
+        .expect(201);
+      
+      plantId = response.body._id;
+    });
+
+    test('should transition from planted to growing', async () => {
+      const response = await request(app)
+        .put(`/api/plants/${plantId}`)
+        .send({ status: 'growing' })
+        .expect(200);
+      
+      expect(response.body.status).toBe('growing');
+    });
+
+    test('should transition from growing to flowering', async () => {
+      // First transition to growing
+      await request(app)
+        .put(`/api/plants/${plantId}`)
+        .send({ status: 'growing' })
+        .expect(200);
+
+      // Then transition to flowering
+      const response = await request(app)
+        .put(`/api/plants/${plantId}`)
+        .send({ status: 'flowering' })
+        .expect(200);
+      
+      expect(response.body.status).toBe('flowering');
+    });
+
+    test('should handle invalid status transitions', async () => {
+      const response = await request(app)
+        .put(`/api/plants/${plantId}`)
+        .send({ status: 'invalid-status' })
+        .expect(400);
+      
+      expect(response.body).toHaveProperty('error');
+      expect(response.body.error).toContain('Invalid status');
+    });
+  });
 }); 
