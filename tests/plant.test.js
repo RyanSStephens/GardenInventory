@@ -515,4 +515,62 @@ describe('Plant API', () => {
       expect(response.body.error).toContain('Invalid status');
     });
   });
+
+  describe('Plant API Performance', () => {
+    test('should handle bulk plant creation efficiently', async () => {
+      const startTime = Date.now();
+      const promises = [];
+      
+      for (let i = 0; i < 10; i++) {
+        const plantData = {
+          name: `Bulk Plant ${i}`,
+          variety: 'Test Variety',
+          category: 'vegetable'
+        };
+        
+        promises.push(
+          request(app)
+            .post('/api/plants')
+            .send(plantData)
+            .expect(201)
+        );
+      }
+      
+      await Promise.all(promises);
+      const endTime = Date.now();
+      const duration = endTime - startTime;
+      
+      // Should complete within 2 seconds
+      expect(duration).toBeLessThan(2000);
+    });
+
+    test('should paginate large result sets', async () => {
+      // Create test plants first
+      const promises = [];
+      for (let i = 0; i < 25; i++) {
+        const plantData = {
+          name: `Pagination Plant ${i}`,
+          variety: 'Test Variety',
+          category: 'vegetable'
+        };
+        
+        promises.push(
+          request(app)
+            .post('/api/plants')
+            .send(plantData)
+        );
+      }
+      
+      await Promise.all(promises);
+      
+      // Test pagination
+      const response = await request(app)
+        .get('/api/plants?page=1&limit=10')
+        .expect(200);
+      
+      expect(response.body.plants).toHaveLength(10);
+      expect(response.body).toHaveProperty('totalPages');
+      expect(response.body).toHaveProperty('currentPage', 1);
+    });
+  });
 }); 
