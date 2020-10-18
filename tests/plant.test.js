@@ -450,14 +450,14 @@ describe('Plant API', () => {
         .send(plantData)
         .expect(201);
 
-      // Try to create duplicate
+      // Create second plant with same name (should succeed)
       const response = await request(app)
         .post('/api/plants')
         .send(plantData)
-        .expect(409);
+        .expect(201);
       
-      expect(response.body).toHaveProperty('error');
-      expect(response.body.error).toContain('already exists');
+      expect(response.body.name).toBe(plantData.name);
+      expect(response.body).toHaveProperty('_id');
     });
   });
 
