@@ -151,40 +151,45 @@ app.get('*', (req, res) => {
   }
 });
 
-// Error handling middleware
+// Global error handling middleware
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
+  logger.error('Unhandled error:', {
+    error: err.message,
+    stack: err.stack,
+    url: req.url,
+    method: req.method,
+    ip: req.ip,
+    userAgent: req.get('User-Agent')
+  });
+
+  // Don't leak error details in production
+  const isDevelopment = process.env.NODE_ENV === 'development';
   
-  // Mongoose validation error
   if (err.name === 'ValidationError') {
-    const errors = Object.values(err.errors).map(e => e.message);
     return res.status(400).json({
-      success: false,
       error: 'Validation Error',
-      details: errors
+      details: isDevelopment ? err.message : 'Invalid input data'
     });
   }
-  
-  // Mongoose cast error (invalid ObjectId)
+
   if (err.name === 'CastError') {
     return res.status(400).json({
-      success: false,
-      error: 'Invalid ID format'
+      error: 'Invalid ID format',
+      details: isDevelopment ? err.message : 'The provided ID is not valid'
     });
   }
-  
-  // Duplicate key error
+
   if (err.code === 11000) {
-    return res.status(400).json({
-      success: false,
-      error: 'Duplicate entry'
+    return res.status(409).json({
+      error: 'Duplicate Entry',
+      details: isDevelopment ? err.message : 'A record with this data already exists'
     });
   }
-  
-  // Default error
+
+  // Default error response
   res.status(err.status || 500).json({
-    success: false,
-    error: err.message || 'Internal Server Error'
+    error: isDevelopment ? err.message : 'Internal Server Error',
+    ...(isDevelopment && { stack: err.stack })
   });
 });
 
