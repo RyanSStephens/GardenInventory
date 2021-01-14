@@ -1,191 +1,163 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to the Garden Inventory Management System will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [1.4.0] - 2022-03-15
-
-### Added
-- Comprehensive analytics service with caching
-- Complete API documentation with examples
-- Plant growth analytics and insights
-- Harvest analytics with seasonal patterns
-- Inventory analytics and value tracking
-- Performance metrics and monitoring
-
-### Changed
-- Improved analytics calculation performance
-- Enhanced API documentation structure
-
-## [1.3.0] - 2022-01-28
-
 ### Added
 - Comprehensive backup and data export system
-- Automated backup compression and cleanup
-- Data export in JSON and CSV formats
-- Backup management API with download capabilities
-- Scheduled weekly backups with notifications
-- Backup retention policy with configurable limits
+- Advanced analytics for plant growth and harvest trends
+- Automated email notification system
+- Task scheduling with cron-based automation
+- Performance monitoring and health checks
+- Docker containerization with multi-stage builds
+- Nginx reverse proxy configuration
+- MongoDB initialization and seeding scripts
 
 ### Changed
-- Improved backup performance with streaming
-- Enhanced error handling for backup operations
+- Enhanced error handling with environment-aware responses
+- Improved security headers with helmet configuration
+- Refactored CSS with design system variables
+- Updated dependencies to latest stable versions
+- Expanded test coverage with edge cases and performance tests
 
-## [1.2.0] - 2021-11-15
+### Fixed
+- Plant model date validation for partial updates
+- CSP headers causing frontend compatibility issues
+- Build script execution order for CI/CD pipeline
+- Test expectations for duplicate plant handling
+
+### Security
+- Added JWT authentication middleware
+- Implemented input validation for all models
+- Enhanced rate limiting and CORS policies
+- Secure error responses hiding sensitive information
+
+## [1.2.0] - 2021-01-14
 
 ### Added
-- Automated notifications and task scheduling system
-- Email notification system with HTML templates
-- Smart plant care reminders
-- Low stock inventory alerts
-- Notification queue with retry logic
-- Scheduled tasks for maintenance and monitoring
-
-### Changed
-- Improved notification delivery reliability
-- Enhanced task scheduling flexibility
-
-## [1.1.0] - 2021-08-30
-
-### Added
-- Comprehensive logging and monitoring system
-- Structured logging with Winston
+- Comprehensive logging system with Winston
 - Application metrics tracking
 - Health check endpoints
+- Monitoring middleware for request/response tracking
+- Protected metrics endpoint with API key authentication
+
+### Changed
+- Improved dashboard analytics with seasonal patterns
+- Enhanced plant growth timeline analysis
+- Updated inventory value calculations
+- Refactored notification system architecture
+
+### Fixed
+- Memory leak in analytics processing
+- Performance issues with large dataset queries
+- Timezone handling in scheduled tasks
+
+## [1.1.0] - 2020-12-08
+
+### Added
+- Automated notification system
+- Email templates for plant care reminders
+- Low stock inventory alerts
+- Scheduled task management
+- Notification queue with retry logic
+
+### Changed
+- Enhanced dashboard with real-time statistics
+- Improved harvest trends analysis
+- Updated plant care reminder logic
+
+### Fixed
+- Date calculation errors in harvest predictions
+- Email delivery issues in development environment
+
+## [1.0.0] - 2020-10-12
+
+### Added
+- Complete REST API for plants, inventory, and harvests
+- Authentication middleware with JWT
+- Input validation for all data models
+- Comprehensive test suite with Jest and Supertest
+- Utility functions for garden management
 - Performance monitoring middleware
-- Error tracking and reporting
 
 ### Changed
-- Improved application observability
-- Enhanced debugging capabilities
+- Migrated from basic HTML to modern CSS Grid/Flexbox
+- Enhanced frontend JavaScript with class-based architecture
+- Improved database models with better relationships
 
-## [1.0.0] - 2021-06-25
+### Fixed
+- CORS issues with frontend API calls
+- Database connection handling
+- Error responses consistency
 
-### Added
-- Docker containerization and deployment infrastructure
-- Production-ready Dockerfile with multi-stage build
-- Docker Compose setup with MongoDB and Nginx
-- Health checks and container monitoring
-- Nginx reverse proxy configuration
-- MongoDB initialization scripts
-
-### Changed
-- Migrated to containerized deployment
-- Improved production readiness
-
-## [0.6.0] - 2021-04-18
+## [0.3.0] - 2020-08-30
 
 ### Added
-- Performance monitoring middleware
-- Response time tracking
-- Compression middleware
-- Caching headers
-- Rate limiting enhancements
-
-### Changed
-- Improved application performance
-- Better resource utilization
-
-## [0.5.0] - 2021-02-20
-
-### Added
-- Advanced dashboard analytics
-- Harvest trends analysis
-- Plant growth timeline
-- Inventory value analysis
-- Enhanced README documentation
-
-### Changed
-- Improved dashboard user experience
-- Better data visualization
-
-## [0.4.0] - 2020-12-08
-
-### Added
-- Development seed data and configuration
-- Realistic sample data for testing
-- Environment configuration template
-- Database seeding scripts
-
-### Changed
-- Improved development workflow
-- Better testing data setup
-
-## [0.3.0] - 2020-10-12
-
-### Added
-- Middleware system (authentication, validation)
-- Utility functions for common operations
-- Comprehensive test suite with Jest
-- Input validation for all models
-
-### Changed
-- Enhanced security with JWT authentication
-- Improved data validation
-- Better error handling
-
-## [0.2.0] - 2020-08-30
-
-### Added
-- Frontend styling with modern CSS
-- JavaScript functionality for SPA behavior
+- Modern CSS styling with animations
 - Responsive design for mobile devices
-- Interactive dashboard components
+- Navigation system and dashboard
+- Status badges and visual indicators
+- Card-based layouts for better UX
 
 ### Changed
-- Improved user interface design
-- Better mobile experience
+- Complete frontend redesign
+- Improved user interface components
+- Enhanced accessibility features
 
-## [0.1.0] - 2020-07-22
+## [0.2.0] - 2020-07-22
 
 ### Added
-- REST API routes for all resources
-- CRUD operations for plants, inventory, harvests
-- Advanced filtering and search capabilities
-- Population of related data
+- Complete CRUD operations for all models
+- Specialized filtering and statistics endpoints
+- Population of related data in responses
+- Error handling for API routes
 
 ### Changed
-- Complete API functionality
-- Better data relationships
+- Improved API response structure
+- Enhanced data relationships
+- Better error messages
 
-## [0.0.3] - 2020-06-15
+## [0.1.0] - 2020-06-15
 
 ### Added
-- MongoDB data models
-- Plant model with lifecycle tracking
-- Inventory model with stock management
-- Harvest model with quality tracking
+- MongoDB data models for Plant, Inventory, and Harvest
+- Database connection and configuration
+- Basic server structure with Express
+- Initial project setup and dependencies
 
 ### Changed
-- Structured data storage
-- Improved data relationships
+- Project structure organization
+- Database schema design
 
-## [0.0.2] - 2020-05-20
+---
 
-### Added
-- Basic Express server setup
-- MongoDB connection configuration
-- Initial HTML interface
-- Navigation system
+## Development Guidelines
 
-### Changed
-- Basic application structure
-- Database connectivity
+### Commit Message Format
+```
+type: description
 
-## [0.0.1] - 2020-04-15
+- Bullet point changes
+- Additional details
+```
 
-### Added
-- Initial project setup
-- README with project overview
-- Package.json with dependencies
-- Git repository initialization
+### Types
+- `feat`: New features
+- `fix`: Bug fixes
+- `improve`: Enhancements to existing features
+- `refactor`: Code refactoring
+- `test`: Adding or updating tests
+- `docs`: Documentation updates
+- `chore`: Maintenance tasks
 
-### Changed
-- Project foundation established
+### Versioning
+- **Major**: Breaking changes
+- **Minor**: New features (backward compatible)
+- **Patch**: Bug fixes (backward compatible)
 
 [Unreleased]: https://github.com/yourusername/garden-inventory/compare/v1.4.0...HEAD
 [1.4.0]: https://github.com/yourusername/garden-inventory/compare/v1.3.0...v1.4.0
