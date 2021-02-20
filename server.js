@@ -27,6 +27,7 @@ db.once('open', () => {
 const plantRoutes = require('./routes/plants');
 const inventoryRoutes = require('./routes/inventory');
 const harvestRoutes = require('./routes/harvests');
+const dashboardRoutes = require('./routes/dashboard');
 
 // Routes
 app.get('/', (req, res) => {
@@ -41,6 +42,7 @@ app.get('/health', (req, res) => {
 app.use('/api/plants', plantRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/harvests', harvestRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 app.listen(PORT, () => {
   console.log(`Garden Inventory server running on port ${PORT}`);
