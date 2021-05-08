@@ -2,179 +2,336 @@ const mongoose = require('mongoose');
 const Plant = require('../models/Plant');
 const Inventory = require('../models/Inventory');
 const Harvest = require('../models/Harvest');
+require('dotenv').config();
 
-const seedPlants = [
-  {
-    name: 'Cherry Tomato',
-    variety: 'Sweet 100',
-    category: 'vegetable',
-    plantedDate: new Date('2020-04-15'),
-    location: 'Garden Bed 1',
-    status: 'growing',
-    expectedHarvestDate: new Date('2020-07-15'),
-    notes: 'Started from seed indoors, transplanted May 1st'
-  },
-  {
-    name: 'Basil',
-    variety: 'Genovese',
-    category: 'herb',
-    plantedDate: new Date('2020-05-01'),
-    location: 'Herb Garden',
-    status: 'growing',
-    notes: 'Perfect for pesto making'
-  },
-  {
-    name: 'Lettuce',
-    variety: 'Buttercrunch',
-    category: 'vegetable',
-    plantedDate: new Date('2020-03-20'),
-    location: 'Cold Frame',
-    status: 'harvested',
-    notes: 'Great early season crop'
-  },
-  {
-    name: 'Marigold',
-    variety: 'French',
-    category: 'flower',
-    plantedDate: new Date('2020-05-15'),
-    location: 'Border Garden',
-    status: 'flowering',
-    notes: 'Natural pest deterrent'
-  },
-  {
-    name: 'Bell Pepper',
-    variety: 'California Wonder',
-    category: 'vegetable',
-    plantedDate: new Date('2020-05-10'),
-    location: 'Garden Bed 2',
-    status: 'fruiting',
-    expectedHarvestDate: new Date('2020-08-01'),
-    notes: 'Slow to start but producing well now'
-  }
-];
-
-const seedInventory = [
-  {
-    name: 'Tomato Seeds - Roma',
-    category: 'seeds',
-    quantity: 25,
-    unit: 'packets',
-    location: 'Seed Storage',
-    supplier: 'Burpee',
-    cost: 3.99,
-    minimumStock: 5,
-    purchaseDate: new Date('2020-02-15'),
-    notes: 'Great paste tomato variety'
-  },
-  {
-    name: 'Garden Trowel',
-    category: 'tools',
-    quantity: 2,
-    unit: 'pieces',
-    location: 'Tool Shed',
-    supplier: 'Local Hardware',
-    cost: 15.99,
-    minimumStock: 1,
-    notes: 'Stainless steel, very durable'
-  },
-  {
-    name: 'Organic Compost',
-    category: 'soil',
-    quantity: 10,
-    unit: 'bags',
-    location: 'Storage Shed',
-    supplier: 'Garden Center',
-    cost: 8.99,
-    minimumStock: 3,
-    purchaseDate: new Date('2020-03-01'),
-    notes: 'High quality organic matter'
-  },
-  {
-    name: 'Watering Can',
-    category: 'equipment',
-    quantity: 1,
-    unit: 'pieces',
-    location: 'Greenhouse',
-    cost: 24.99,
-    minimumStock: 1,
-    notes: '2-gallon capacity with fine rose attachment'
-  },
-  {
-    name: 'Neem Oil',
-    category: 'pesticide',
-    quantity: 2,
-    unit: 'bottles',
-    location: 'Chemical Storage',
-    supplier: 'Organic Solutions',
-    cost: 12.99,
-    minimumStock: 1,
-    expirationDate: new Date('2022-03-01'),
-    notes: 'Organic pest control solution'
-  }
-];
-
-const seedData = async () => {
+const connectDB = async () => {
   try {
-    // Connect to database
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/garden_inventory', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-
-    console.log('Connected to MongoDB');
-
-    // Clear existing data
-    await Plant.deleteMany({});
-    await Inventory.deleteMany({});
-    await Harvest.deleteMany({});
-
-    console.log('Cleared existing data');
-
-    // Insert seed data
-    const plants = await Plant.insertMany(seedPlants);
-    console.log(`Inserted ${plants.length} plants`);
-
-    const inventory = await Inventory.insertMany(seedInventory);
-    console.log(`Inserted ${inventory.length} inventory items`);
-
-    // Create some harvest records for the harvested lettuce
-    const lettuce = plants.find(p => p.name === 'Lettuce');
-    if (lettuce) {
-      const harvestData = [
-        {
-          plant: lettuce._id,
-          harvestDate: new Date('2020-04-20'),
-          quantity: 2.5,
-          unit: 'pounds',
-          quality: 'excellent',
-          notes: 'Perfect timing, very tender leaves'
-        },
-        {
-          plant: lettuce._id,
-          harvestDate: new Date('2020-04-25'),
-          quantity: 1.8,
-          unit: 'pounds',
-          quality: 'good',
-          notes: 'Second harvest before bolting'
-        }
-      ];
-
-      const harvests = await Harvest.insertMany(harvestData);
-      console.log(`Inserted ${harvests.length} harvest records`);
-    }
-
-    console.log('Seed data inserted successfully!');
-    process.exit(0);
-
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/garden-inventory');
+    console.log('📦 Connected to MongoDB for seeding');
   } catch (error) {
-    console.error('Error seeding data:', error);
+    console.error('❌ MongoDB connection error:', error);
+    process.exit(1);
+  }
+};
+
+const seedPlants = async () => {
+  console.log('🌱 Seeding plants...');
+  
+  const plants = [
+    {
+      name: 'Tomato',
+      variety: 'Cherokee Purple',
+      category: 'vegetables',
+      status: 'growing',
+      plantedDate: new Date('2023-04-15'),
+      expectedHarvestDate: new Date('2023-07-15'),
+      location: 'Garden Bed A - Row 1',
+      notes: 'Heirloom variety with excellent flavor',
+      careInstructions: 'Water deeply twice weekly, stake when 12 inches tall',
+      tags: ['heirloom', 'indeterminate', 'purple']
+    },
+    {
+      name: 'Basil',
+      variety: 'Genovese',
+      category: 'herbs',
+      status: 'flowering',
+      plantedDate: new Date('2023-05-01'),
+      expectedHarvestDate: new Date('2023-06-01'),
+      location: 'Herb Garden - Container 3',
+      notes: 'Perfect for pesto, pinch flowers to encourage leaf growth',
+      careInstructions: 'Keep soil moist, harvest regularly',
+      tags: ['culinary', 'aromatic', 'annual']
+    },
+    {
+      name: 'Lettuce',
+      variety: 'Buttercrunch',
+      category: 'vegetables',
+      status: 'harvested',
+      plantedDate: new Date('2023-03-20'),
+      expectedHarvestDate: new Date('2023-05-15'),
+      harvestDate: new Date('2023-05-12'),
+      location: 'Cold Frame - Section 2',
+      notes: 'Excellent head formation, sweet and crispy',
+      isActive: false,
+      tags: ['cool-season', 'quick-growing']
+    },
+    {
+      name: 'Sunflower',
+      variety: 'Mammoth',
+      category: 'flowers',
+      status: 'fruiting',
+      plantedDate: new Date('2023-05-15'),
+      expectedHarvestDate: new Date('2023-09-01'),
+      location: 'Back Fence - East Side',
+      notes: 'Growing over 8 feet tall, attracting lots of bees',
+      careInstructions: 'Support with stake, deep watering',
+      tags: ['tall', 'pollinator-friendly', 'seeds']
+    },
+    {
+      name: 'Pepper',
+      variety: 'Bell - California Wonder',
+      category: 'vegetables',
+      status: 'growing',
+      plantedDate: new Date('2023-05-10'),
+      expectedHarvestDate: new Date('2023-08-01'),
+      location: 'Garden Bed B - Row 2',
+      notes: 'First flowers appearing, looking healthy',
+      careInstructions: 'Regular watering, mulch around base',
+      tags: ['sweet', 'thick-walled', 'productive']
+    },
+    {
+      name: 'Cucumber',
+      variety: 'Marketmore 76',
+      category: 'vegetables',
+      status: 'flowering',
+      plantedDate: new Date('2023-05-20'),
+      expectedHarvestDate: new Date('2023-07-10'),
+      location: 'Trellis - North Wall',
+      notes: 'Climbing well, first female flowers visible',
+      careInstructions: 'Train vines up trellis, consistent moisture',
+      tags: ['climbing', 'disease-resistant', 'slicing']
+    },
+    {
+      name: 'Marigold',
+      variety: 'French Petite',
+      category: 'flowers',
+      status: 'flowering',
+      plantedDate: new Date('2023-04-25'),
+      expectedHarvestDate: new Date('2023-10-15'),
+      location: 'Garden Borders - Multiple',
+      notes: 'Companion planting for pest control',
+      careInstructions: 'Deadhead regularly, drought tolerant',
+      tags: ['companion', 'pest-deterrent', 'colorful']
+    },
+    {
+      name: 'Carrot',
+      variety: 'Nantes',
+      category: 'vegetables',
+      status: 'growing',
+      plantedDate: new Date('2023-04-01'),
+      expectedHarvestDate: new Date('2023-07-01'),
+      location: 'Raised Bed C - Deep Section',
+      notes: 'Thinned to 2 inches apart, good germination',
+      careInstructions: 'Keep soil loose, light watering',
+      tags: ['root-crop', 'storage', 'sweet']
+    }
+  ];
+
+  await Plant.deleteMany({});
+  const createdPlants = await Plant.insertMany(plants);
+  console.log(`✅ Created ${createdPlants.length} plants`);
+  return createdPlants;
+};
+
+const seedInventory = async () => {
+  console.log('📦 Seeding inventory...');
+  
+  const inventory = [
+    {
+      name: 'Tomato Seeds - Cherokee Purple',
+      category: 'seeds',
+      quantity: 25,
+      unit: 'seeds',
+      cost: 4.99,
+      supplier: 'Seed Savers Exchange',
+      location: 'Seed Storage - Refrigerator',
+      expirationDate: new Date('2025-12-31'),
+      minimumStock: 10,
+      notes: 'Heirloom variety, save seeds from best plants'
+    },
+    {
+      name: 'Organic Compost',
+      category: 'soil-amendments',
+      quantity: 5,
+      unit: 'cubic yards',
+      cost: 150.00,
+      supplier: 'Local Farm Co-op',
+      location: 'Compost Bin Area',
+      minimumStock: 1,
+      notes: 'Well-aged, perfect for spring soil prep'
+    },
+    {
+      name: 'Bamboo Stakes - 6ft',
+      category: 'tools',
+      quantity: 20,
+      unit: 'pieces',
+      cost: 24.99,
+      supplier: 'Garden Center Plus',
+      location: 'Tool Shed - Wall Mount',
+      minimumStock: 5,
+      notes: 'For supporting tall plants like tomatoes'
+    },
+    {
+      name: 'Drip Irrigation Tubing',
+      category: 'irrigation',
+      quantity: 100,
+      unit: 'feet',
+      cost: 45.00,
+      supplier: 'Irrigation Supply Co',
+      location: 'Garage - Shelf 2',
+      minimumStock: 25,
+      notes: '1/4 inch tubing for micro-irrigation'
+    },
+    {
+      name: 'Organic Fertilizer - All Purpose',
+      category: 'fertilizers',
+      quantity: 2,
+      unit: 'bags (50lb)',
+      cost: 89.98,
+      supplier: 'Organic Gardens Inc',
+      location: 'Tool Shed - Floor',
+      expirationDate: new Date('2024-06-30'),
+      minimumStock: 1,
+      notes: '4-4-4 NPK ratio, slow release'
+    },
+    {
+      name: 'Garden Gloves - Medium',
+      category: 'tools',
+      quantity: 3,
+      unit: 'pairs',
+      cost: 21.97,
+      supplier: 'Hardware Store',
+      location: 'Tool Shed - Hook',
+      minimumStock: 2,
+      notes: 'Waterproof with grip coating'
+    },
+    {
+      name: 'Mulch - Straw',
+      category: 'mulch',
+      quantity: 10,
+      unit: 'bales',
+      cost: 60.00,
+      supplier: 'Farm Supply Store',
+      location: 'Side Yard - Covered',
+      minimumStock: 3,
+      notes: 'Excellent for vegetable garden paths'
+    },
+    {
+      name: 'Seed Starting Trays',
+      category: 'containers',
+      quantity: 8,
+      unit: 'trays (72-cell)',
+      cost: 32.00,
+      supplier: 'Greenhouse Supply',
+      location: 'Garage - Shelf 1',
+      minimumStock: 2,
+      notes: 'Reusable plastic trays for seed starting'
+    },
+    {
+      name: 'pH Test Kit',
+      category: 'testing',
+      quantity: 1,
+      unit: 'kit',
+      cost: 12.99,
+      supplier: 'Garden Center Plus',
+      location: 'Tool Shed - Drawer',
+      expirationDate: new Date('2024-12-31'),
+      minimumStock: 1,
+      notes: 'Digital soil pH meter with probe'
+    },
+    {
+      name: 'Neem Oil Concentrate',
+      category: 'pest-control',
+      quantity: 1,
+      unit: 'bottle (32oz)',
+      cost: 18.95,
+      supplier: 'Organic Solutions',
+      location: 'Tool Shed - Chemical Cabinet',
+      expirationDate: new Date('2025-03-15'),
+      minimumStock: 1,
+      notes: 'Organic pest and disease control'
+    }
+  ];
+
+  await Inventory.deleteMany({});
+  const createdInventory = await Inventory.insertMany(inventory);
+  console.log(`✅ Created ${createdInventory.length} inventory items`);
+  return createdInventory;
+};
+
+const seedHarvests = async (plants) => {
+  console.log('🌾 Seeding harvests...');
+  
+  const lettuceId = plants.find(p => p.name === 'Lettuce')?._id;
+  
+  const harvests = [
+    {
+      plant: lettuceId,
+      harvestDate: new Date('2023-05-12'),
+      quantity: 8,
+      unit: 'heads',
+      weight: 2.5,
+      quality: 'excellent',
+      storageMethod: 'refrigerated',
+      storageLocation: 'Kitchen refrigerator',
+      notes: 'Perfect timing, crispy and sweet heads',
+      estimatedValue: 24.00
+    },
+    {
+      plant: plants.find(p => p.name === 'Basil')?._id,
+      harvestDate: new Date('2023-06-01'),
+      quantity: 2,
+      unit: 'cups',
+      weight: 0.5,
+      quality: 'good',
+      storageMethod: 'dried',
+      storageLocation: 'Pantry - Herb Jars',
+      notes: 'First major harvest, made pesto',
+      estimatedValue: 8.00
+    },
+    {
+      plant: plants.find(p => p.name === 'Basil')?._id,
+      harvestDate: new Date('2023-06-15'),
+      quantity: 1.5,
+      unit: 'cups',
+      weight: 0.3,
+      quality: 'excellent',
+      storageMethod: 'fresh',
+      storageLocation: 'Used immediately',
+      notes: 'Perfect for caprese salad',
+      estimatedValue: 6.00
+    }
+  ];
+
+  await Harvest.deleteMany({});
+  const createdHarvests = await Harvest.insertMany(harvests);
+  console.log(`✅ Created ${createdHarvests.length} harvest records`);
+  return createdHarvests;
+};
+
+const seedDatabase = async () => {
+  try {
+    await connectDB();
+    
+    console.log('🚀 Starting database seeding...');
+    console.log('⚠️  This will clear existing data!');
+    
+    const plants = await seedPlants();
+    const inventory = await seedInventory();
+    const harvests = await seedHarvests(plants);
+    
+    console.log('\n🎉 Database seeding completed successfully!');
+    console.log(`📊 Summary:`);
+    console.log(`   - Plants: ${plants.length}`);
+    console.log(`   - Inventory Items: ${inventory.length}`);
+    console.log(`   - Harvest Records: ${harvests.length}`);
+    console.log('\n🌱 Your garden inventory is ready to use!');
+    
+    process.exit(0);
+  } catch (error) {
+    console.error('❌ Error seeding database:', error);
     process.exit(1);
   }
 };
 
 // Run seeding if this file is executed directly
 if (require.main === module) {
-  seedData();
+  seedDatabase();
 }
 
-module.exports = { seedData, seedPlants, seedInventory }; 
+module.exports = {
+  seedDatabase,
+  seedPlants,
+  seedInventory,
+  seedHarvests
+}; 
