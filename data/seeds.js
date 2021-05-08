@@ -299,6 +299,162 @@ const seedHarvests = async (plants) => {
   return createdHarvests;
 };
 
+// Additional realistic plants for better testing
+const additionalPlants = [
+  {
+    name: 'Cherry Tomatoes',
+    variety: 'Sweet 100',
+    category: 'vegetable',
+    plantingDate: new Date('2024-03-15'),
+    expectedHarvestDate: new Date('2024-06-15'),
+    location: 'Greenhouse Shelf A',
+    status: 'flowering',
+    notes: 'Excellent for fresh eating and salads. Very productive variety.',
+    careInstructions: 'Water daily, support with stakes, pinch suckers',
+    isActive: true
+  },
+  {
+    name: 'Buttercrunch Lettuce',
+    variety: 'Buttercrunch',
+    category: 'vegetable',
+    plantingDate: new Date('2024-02-20'),
+    expectedHarvestDate: new Date('2024-04-20'),
+    location: 'Cold Frame',
+    status: 'ready_to_harvest',
+    notes: 'Cool season crop, perfect for spring harvests',
+    careInstructions: 'Keep soil moist, harvest outer leaves first',
+    isActive: true
+  },
+  {
+    name: 'Purple Basil',
+    variety: 'Dark Opal',
+    category: 'herb',
+    plantingDate: new Date('2024-04-01'),
+    expectedHarvestDate: new Date('2024-05-15'),
+    location: 'Herb Garden',
+    status: 'growing',
+    notes: 'Beautiful purple leaves, great for cooking and garnish',
+    careInstructions: 'Pinch flowers to encourage leaf growth, water regularly',
+    isActive: true
+  },
+  {
+    name: 'Sunflowers',
+    variety: 'Mammoth Russian',
+    category: 'flower',
+    plantingDate: new Date('2024-04-10'),
+    expectedHarvestDate: new Date('2024-08-15'),
+    location: 'Back Fence',
+    status: 'growing',
+    notes: 'Giant variety that can reach 12 feet tall',
+    careInstructions: 'Full sun, deep watering, may need staking',
+    isActive: true
+  },
+  {
+    name: 'Zucchini',
+    variety: 'Black Beauty',
+    category: 'vegetable',
+    plantingDate: new Date('2024-04-20'),
+    expectedHarvestDate: new Date('2024-06-20'),
+    location: 'Vegetable Bed 3',
+    status: 'planted',
+    notes: 'Prolific producer, harvest when 6-8 inches long',
+    careInstructions: 'Space well for air circulation, regular watering',
+    isActive: true
+  }
+];
+
+// Additional inventory items
+const additionalInventory = [
+  {
+    name: 'Organic Bone Meal',
+    category: 'fertilizer',
+    quantity: 5,
+    unit: 'lbs',
+    cost: 12.99,
+    supplier: 'Garden Supply Co',
+    purchaseDate: new Date('2024-02-15'),
+    expirationDate: new Date('2026-02-15'),
+    location: 'Shed - Shelf B',
+    minimumStock: 2,
+    notes: 'Slow-release phosphorus for root development'
+  },
+  {
+    name: 'Copper Fungicide',
+    category: 'pesticide',
+    quantity: 1,
+    unit: 'bottle',
+    cost: 8.50,
+    supplier: 'Organic Solutions',
+    purchaseDate: new Date('2024-03-01'),
+    expirationDate: new Date('2025-03-01'),
+    location: 'Shed - Chemical Cabinet',
+    minimumStock: 1,
+    notes: 'For organic disease control on fruits and vegetables'
+  },
+  {
+    name: 'Drip Irrigation Tubing',
+    category: 'tools',
+    quantity: 100,
+    unit: 'feet',
+    cost: 25.00,
+    supplier: 'Irrigation Direct',
+    purchaseDate: new Date('2024-01-20'),
+    location: 'Shed - Storage Bin',
+    minimumStock: 50,
+    notes: '1/4 inch tubing for micro-irrigation systems'
+  },
+  {
+    name: 'Heirloom Pepper Seeds',
+    category: 'seeds',
+    quantity: 8,
+    unit: 'packets',
+    cost: 32.00,
+    supplier: 'Heritage Seeds',
+    purchaseDate: new Date('2024-01-15'),
+    expirationDate: new Date('2026-01-15'),
+    location: 'House - Refrigerator',
+    minimumStock: 3,
+    notes: 'Mixed variety pack including hot and sweet peppers'
+  }
+];
+
+// Additional harvest records
+const additionalHarvests = [
+  {
+    plant: null, // Will be populated with actual plant ID
+    harvestDate: new Date('2024-03-10'),
+    quantity: 2.5,
+    unit: 'lbs',
+    quality: 'excellent',
+    notes: 'Perfect ripeness, great flavor',
+    storageMethod: 'fresh',
+    storageLocation: 'Kitchen counter',
+    estimatedValue: 8.50
+  },
+  {
+    plant: null, // Will be populated with actual plant ID
+    harvestDate: new Date('2024-02-28'),
+    quantity: 1.2,
+    unit: 'lbs',
+    quality: 'good',
+    notes: 'Tender leaves, harvested before flowering',
+    storageMethod: 'refrigerated',
+    storageLocation: 'Refrigerator crisper',
+    estimatedValue: 4.80
+  },
+  {
+    plant: null, // Will be populated with actual plant ID
+    harvestDate: new Date('2024-03-20'),
+    quantity: 0.5,
+    unit: 'lbs',
+    quality: 'excellent',
+    notes: 'Aromatic and flavorful, perfect for pesto',
+    storageMethod: 'dried',
+    storageLocation: 'Pantry',
+    estimatedValue: 12.00
+  }
+];
+
 const seedDatabase = async () => {
   try {
     await connectDB();
