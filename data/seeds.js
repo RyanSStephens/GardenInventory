@@ -457,26 +457,40 @@ const additionalHarvests = [
 
 const seedDatabase = async () => {
   try {
-    await connectDB();
+    // Clear existing data
+    await Plant.deleteMany({});
+    await Inventory.deleteMany({});
+    await Harvest.deleteMany({});
     
-    console.log('🚀 Starting database seeding...');
-    console.log('⚠️  This will clear existing data!');
+    console.log('Cleared existing data');
     
-    const plants = await seedPlants();
-    const inventory = await seedInventory();
-    const harvests = await seedHarvests(plants);
+    // Create plants (combine original and additional)
+    const allPlants = [...plants, ...additionalPlants];
+    const createdPlants = await Plant.insertMany(allPlants);
+    console.log(`Created ${createdPlants.length} plants`);
     
-    console.log('\n🎉 Database seeding completed successfully!');
-    console.log(`📊 Summary:`);
-    console.log(`   - Plants: ${plants.length}`);
-    console.log(`   - Inventory Items: ${inventory.length}`);
-    console.log(`   - Harvest Records: ${harvests.length}`);
-    console.log('\n🌱 Your garden inventory is ready to use!');
+    // Create inventory items (combine original and additional)
+    const allInventory = [...inventory, ...additionalInventory];
+    const createdInventory = await Inventory.insertMany(allInventory);
+    console.log(`Created ${createdInventory.length} inventory items`);
     
-    process.exit(0);
+    // Create harvest records (combine original and additional)
+    const allHarvests = [...harvests, ...additionalHarvests];
+    // Assign random plants to harvests
+    const harvestsWithPlants = allHarvests.map(harvest => ({
+      ...harvest,
+      plant: createdPlants[Math.floor(Math.random() * createdPlants.length)]._id
+    }));
+    
+    const createdHarvests = await Harvest.insertMany(harvestsWithPlants);
+    console.log(`Created ${createdHarvests.length} harvest records`);
+    
+    console.log('Database seeded successfully!');
+    console.log(`Total records: ${createdPlants.length} plants, ${createdInventory.length} inventory, ${createdHarvests.length} harvests`);
+    
   } catch (error) {
-    console.error('❌ Error seeding database:', error);
-    process.exit(1);
+    console.error('Error seeding database:', error);
+    throw error;
   }
 };
 
