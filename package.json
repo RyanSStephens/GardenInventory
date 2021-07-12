@@ -34,19 +34,20 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
-    "mongoose": "^6.8.0",
-    "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.0",
-    "dotenv": "^16.0.3",
+    "mongoose": "^6.8.1",
     "cors": "^2.8.5",
     "helmet": "^6.0.1",
     "express-rate-limit": "^6.7.0",
     "compression": "^1.7.4",
+    "dotenv": "^16.0.3",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.0",
+    "joi": "^17.7.0",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1",
     "nodemailer": "^6.8.0",
     "node-cron": "^3.0.2",
-    "tar": "^6.1.13"
+    "archiver": "^5.3.1"
   },
   "devDependencies": {
     "jest": "^29.3.1",
