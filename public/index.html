@@ -3,63 +3,515 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garden Inventory</title>
+    <meta name="description" content="Garden Inventory Management System - Track your plants, inventory, and harvests">
+    <meta name="keywords" content="garden, inventory, plants, harvest, agriculture, management">
+    <meta name="author" content="Garden Inventory Team">
+    <title>Garden Inventory Management System</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
 </head>
 <body>
     <header>
-        <h1>🌱 Garden Inventory</h1>
-        <nav>
-            <ul>
-                <li><a href="#dashboard">Dashboard</a></li>
-                <li><a href="#plants">Plants</a></li>
-                <li><a href="#inventory">Inventory</a></li>
-                <li><a href="#harvests">Harvests</a></li>
-            </ul>
-        </nav>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>🌱 Garden Inventory</h1>
+                    <p class="tagline">Grow Smart, Track Better</p>
+                </div>
+                <nav>
+                    <a href="#" data-section="dashboard" class="nav-link active">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                    <a href="#" data-section="plants" class="nav-link">
+                        <span class="nav-icon">🌿</span>
+                        <span class="nav-text">Plants</span>
+                    </a>
+                    <a href="#" data-section="inventory" class="nav-link">
+                        <span class="nav-icon">📦</span>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                    <a href="#" data-section="harvests" class="nav-link">
+                        <span class="nav-icon">🌾</span>
+                        <span class="nav-text">Harvests</span>
+                    </a>
+                    <a href="#" data-section="analytics" class="nav-link">
+                        <span class="nav-icon">📈</span>
+                        <span class="nav-text">Analytics</span>
+                    </a>
+                </nav>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="quick-add-btn">
+                        <span>+</span> Quick Add
+                    </button>
+                    <div class="user-menu">
+                        <button class="btn btn-secondary" id="user-menu-btn">
+                            <span class="user-avatar">👤</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
     <main>
-        <section id="dashboard" class="active">
-            <h2>Dashboard</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Plants</h3>
-                    <span class="stat-number" id="total-plants">0</span>
+        <div class="container">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="section-header">
+                    <h2>Dashboard Overview</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-secondary" id="refresh-dashboard">
+                            <span>🔄</span> Refresh
+                        </button>
+                        <button class="btn btn-secondary" id="export-data">
+                            <span>📤</span> Export
+                        </button>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <h3>Active Growing</h3>
-                    <span class="stat-number" id="active-plants">0</span>
+                <div id="dashboard-content">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Loading dashboard...
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <h3>Harvests This Month</h3>
-                    <span class="stat-number" id="monthly-harvests">0</span>
+            </section>
+
+            <!-- Plants Section -->
+            <section id="plants" class="section">
+                <div class="section-header">
+                    <h2>Plant Management</h2>
+                    <div class="section-actions">
+                        <div class="search-box">
+                            <input type="text" id="plant-search" placeholder="Search plants..." class="search-input">
+                            <span class="search-icon">🔍</span>
+                        </div>
+                        <button class="btn btn-primary" id="add-plant-btn">
+                            <span>+</span> Add Plant
+                        </button>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <h3>Inventory Items</h3>
-                    <span class="stat-number" id="inventory-count">0</span>
+                
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>Category:</label>
+                        <select id="plant-category-filter">
+                            <option value="">All Categories</option>
+                            <option value="vegetables">Vegetables</option>
+                            <option value="fruits">Fruits</option>
+                            <option value="herbs">Herbs</option>
+                            <option value="flowers">Flowers</option>
+                            <option value="trees">Trees</option>
+                            <option value="shrubs">Shrubs</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select id="plant-status-filter">
+                            <option value="">All Status</option>
+                            <option value="planted">Planted</option>
+                            <option value="seedling">Seedling</option>
+                            <option value="growing">Growing</option>
+                            <option value="flowering">Flowering</option>
+                            <option value="fruiting">Fruiting</option>
+                            <option value="harvested">Harvested</option>
+                            <option value="dormant">Dormant</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Location:</label>
+                        <select id="plant-location-filter">
+                            <option value="">All Locations</option>
+                            <option value="Garden Bed A">Garden Bed A</option>
+                            <option value="Garden Bed B">Garden Bed B</option>
+                            <option value="Herb Garden">Herb Garden</option>
+                            <option value="Greenhouse">Greenhouse</option>
+                            <option value="Container">Container</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="plants-list" class="grid">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Loading plants...
+                    </div>
+                </div>
+            </section>
+
+            <!-- Inventory Section -->
+            <section id="inventory" class="section">
+                <div class="section-header">
+                    <h2>Inventory Management</h2>
+                    <div class="section-actions">
+                        <div class="search-box">
+                            <input type="text" id="inventory-search" placeholder="Search inventory..." class="search-input">
+                            <span class="search-icon">🔍</span>
+                        </div>
+                        <button class="btn btn-primary" id="add-inventory-btn">
+                            <span>+</span> Add Item
+                        </button>
+                    </div>
+                </div>
+
+                <div class="inventory-stats">
+                    <div class="stat-card warning">
+                        <span class="stat-number" id="low-stock-count">0</span>
+                        <div class="stat-label">Low Stock Items</div>
+                    </div>
+                    <div class="stat-card info">
+                        <span class="stat-number" id="total-value">$0.00</span>
+                        <div class="stat-label">Total Value</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="item-count">0</span>
+                        <div class="stat-label">Total Items</div>
+                    </div>
+                </div>
+
+                <div id="inventory-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Loading inventory...
+                    </div>
+                </div>
+            </section>
+
+            <!-- Harvests Section -->
+            <section id="harvests" class="section">
+                <div class="section-header">
+                    <h2>Harvest Records</h2>
+                    <div class="section-actions">
+                        <div class="date-range">
+                            <input type="date" id="harvest-start-date" class="date-input">
+                            <span>to</span>
+                            <input type="date" id="harvest-end-date" class="date-input">
+                        </div>
+                        <button class="btn btn-primary" id="add-harvest-btn">
+                            <span>+</span> Record Harvest
+                        </button>
+                    </div>
+                </div>
+
+                <div class="harvest-stats">
+                    <div class="stat-card success">
+                        <span class="stat-number" id="total-harvests">0</span>
+                        <div class="stat-label">Total Harvests</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="harvest-weight">0 lbs</span>
+                        <div class="stat-label">Total Weight</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="harvest-value">$0.00</span>
+                        <div class="stat-label">Estimated Value</div>
+                    </div>
+                </div>
+
+                <div id="harvests-list" class="grid">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Loading harvests...
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analytics" class="section">
+                <div class="section-header">
+                    <h2>Analytics & Insights</h2>
+                    <div class="section-actions">
+                        <select id="analytics-timeframe">
+                            <option value="month">This Month</option>
+                            <option value="quarter">This Quarter</option>
+                            <option value="year">This Year</option>
+                            <option value="all">All Time</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="analytics-content">
+                    <div class="analytics-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Growth Trends</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="growth-chart" class="chart-placeholder">
+                                    Chart will be loaded here
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Harvest Analytics</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="harvest-chart" class="chart-placeholder">
+                                    Chart will be loaded here
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Inventory Insights</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="inventory-chart" class="chart-placeholder">
+                                    Chart will be loaded here
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Seasonal Patterns</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="seasonal-chart" class="chart-placeholder">
+                                    Chart will be loaded here
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div id="plant-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Plant</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="plant-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="plant-name">Plant Name *</label>
+                            <input type="text" id="plant-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="plant-variety">Variety</label>
+                            <input type="text" id="plant-variety" name="variety">
+                        </div>
+                        <div class="form-group">
+                            <label for="plant-category">Category *</label>
+                            <select id="plant-category" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="vegetables">Vegetables</option>
+                                <option value="fruits">Fruits</option>
+                                <option value="herbs">Herbs</option>
+                                <option value="flowers">Flowers</option>
+                                <option value="trees">Trees</option>
+                                <option value="shrubs">Shrubs</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="plant-status">Status</label>
+                            <select id="plant-status" name="status">
+                                <option value="planted">Planted</option>
+                                <option value="seedling">Seedling</option>
+                                <option value="growing">Growing</option>
+                                <option value="flowering">Flowering</option>
+                                <option value="fruiting">Fruiting</option>
+                                <option value="harvested">Harvested</option>
+                                <option value="dormant">Dormant</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="plant-planted-date">Planted Date</label>
+                            <input type="date" id="plant-planted-date" name="plantedDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="plant-expected-harvest">Expected Harvest</label>
+                            <input type="date" id="plant-expected-harvest" name="expectedHarvestDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="plant-location">Location</label>
+                            <input type="text" id="plant-location" name="location" placeholder="e.g., Garden Bed A">
+                        </div>
+                        <div class="form-group">
+                            <label for="plant-spacing">Spacing (inches)</label>
+                            <input type="number" id="plant-spacing" name="spacing" min="1" step="0.5">
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="plant-notes">Notes</label>
+                        <textarea id="plant-notes" name="notes" rows="3" placeholder="Care instructions, observations, etc."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="app.closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Plant</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Modal -->
+    <div id="inventory-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Inventory Item</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="inventory-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="inventory-name">Item Name *</label>
+                            <input type="text" id="inventory-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="inventory-category">Category *</label>
+                            <select id="inventory-category" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="seeds">Seeds</option>
+                                <option value="tools">Tools</option>
+                                <option value="fertilizers">Fertilizers</option>
+                                <option value="soil-amendments">Soil Amendments</option>
+                                <option value="pest-control">Pest Control</option>
+                                <option value="irrigation">Irrigation</option>
+                                <option value="containers">Containers</option>
+                                <option value="mulch">Mulch</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inventory-quantity">Quantity *</label>
+                            <input type="number" id="inventory-quantity" name="quantity" required min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="inventory-unit">Unit</label>
+                            <input type="text" id="inventory-unit" name="unit" placeholder="e.g., pieces, lbs, bags">
+                        </div>
+                        <div class="form-group">
+                            <label for="inventory-cost">Cost per Unit</label>
+                            <input type="number" id="inventory-cost" name="cost" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="inventory-supplier">Supplier</label>
+                            <input type="text" id="inventory-supplier" name="supplier">
+                        </div>
+                        <div class="form-group">
+                            <label for="inventory-location">Storage Location</label>
+                            <input type="text" id="inventory-location" name="location">
+                        </div>
+                        <div class="form-group">
+                            <label for="inventory-minimum">Minimum Stock</label>
+                            <input type="number" id="inventory-minimum" name="minimumStock" min="0" step="0.01">
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="inventory-notes">Notes</label>
+                        <textarea id="inventory-notes" name="notes" rows="2"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="app.closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Harvest Modal -->
+    <div id="harvest-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Record Harvest</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="harvest-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="harvest-plant">Plant *</label>
+                            <select id="harvest-plant" name="plant" required>
+                                <option value="">Select Plant</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="harvest-date">Harvest Date *</label>
+                            <input type="date" id="harvest-date" name="harvestDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="harvest-quantity">Quantity *</label>
+                            <input type="number" id="harvest-quantity" name="quantity" required min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="harvest-unit">Unit</label>
+                            <input type="text" id="harvest-unit" name="unit" placeholder="e.g., lbs, pieces, cups">
+                        </div>
+                        <div class="form-group">
+                            <label for="harvest-weight">Weight (lbs)</label>
+                            <input type="number" id="harvest-weight" name="weight" min="0" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="harvest-quality">Quality</label>
+                            <select id="harvest-quality" name="quality">
+                                <option value="excellent">Excellent</option>
+                                <option value="good">Good</option>
+                                <option value="fair">Fair</option>
+                                <option value="poor">Poor</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="harvest-storage">Storage Method</label>
+                            <input type="text" id="harvest-storage" name="storageMethod" placeholder="e.g., refrigerated, frozen, dried">
+                        </div>
+                        <div class="form-group">
+                            <label for="harvest-location">Storage Location</label>
+                            <input type="text" id="harvest-location" name="storageLocation">
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="harvest-notes">Notes</label>
+                        <textarea id="harvest-notes" name="notes" rows="2"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="app.closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Record Harvest</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p>&copy; 2023 Garden Inventory Management System</p>
+                    <p>Built with ❤️ for gardeners everywhere</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" onclick="app.showHelp()">Help</a>
+                    <a href="#" onclick="app.showAbout()">About</a>
+                    <a href="#" onclick="app.exportData()">Export Data</a>
                 </div>
             </div>
-        </section>
-
-        <section id="plants">
-            <h2>Plant Management</h2>
-            <button class="btn-primary" onclick="showAddPlantForm()">Add New Plant</button>
-            <div id="plants-list"></div>
-        </section>
-
-        <section id="inventory">
-            <h2>Inventory Management</h2>
-            <button class="btn-primary" onclick="showAddInventoryForm()">Add Inventory Item</button>
-            <div id="inventory-list"></div>
-        </section>
-
-        <section id="harvests">
-            <h2>Harvest Records</h2>
-            <button class="btn-primary" onclick="showAddHarvestForm()">Record Harvest</button>
-            <div id="harvests-list"></div>
-        </section>
-    </main>
+        </div>
+    </footer>
 
     <script src="app.js"></script>
 </body>
