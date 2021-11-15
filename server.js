@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 3000;
 // Import monitoring and logging
 const logger = require('./utils/logger');
 const { requestMetrics, errorTracking } = require('./middleware/monitoring');
+const scheduler = require('./utils/scheduler');
 
 // Middleware
 app.use(express.json());
@@ -36,6 +37,7 @@ const inventoryRoutes = require('./routes/inventory');
 const harvestRoutes = require('./routes/harvests');
 const dashboardRoutes = require('./routes/dashboard');
 const monitoringRoutes = require('./routes/monitoring');
+const notificationRoutes = require('./routes/notifications');
 
 // Routes
 app.get('/', (req, res) => {
@@ -48,6 +50,7 @@ app.use('/api/inventory', inventoryRoutes);
 app.use('/api/harvests', harvestRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/monitoring', monitoringRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Error handling middleware (must be last)
 app.use(errorTracking);
@@ -59,4 +62,7 @@ app.listen(PORT, () => {
     timestamp: new Date().toISOString()
   });
   console.log(`Garden Inventory server running on port ${PORT}`);
+  
+  // Initialize task scheduler
+  scheduler.initialize();
 }); 
