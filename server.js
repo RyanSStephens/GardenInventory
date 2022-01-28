@@ -38,6 +38,7 @@ const harvestRoutes = require('./routes/harvests');
 const dashboardRoutes = require('./routes/dashboard');
 const monitoringRoutes = require('./routes/monitoring');
 const notificationRoutes = require('./routes/notifications');
+const backupRoutes = require('./routes/backup');
 
 // Routes
 app.get('/', (req, res) => {
@@ -51,6 +52,7 @@ app.use('/api/harvests', harvestRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/monitoring', monitoringRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/backup', backupRoutes);
 
 // Error handling middleware (must be last)
 app.use(errorTracking);

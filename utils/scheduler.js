@@ -1,6 +1,7 @@
 const cron = require('node-cron');
 const logger = require('./logger');
 const notifications = require('./notifications');
+const backupService = require('./backup');
 const Plant = require('../models/Plant');
 const Inventory = require('../models/Inventory');
 
@@ -30,6 +31,9 @@ class TaskScheduler {
     
     // Monthly maintenance on 1st of month at 2 AM
     this.scheduleTask('monthlyMaintenance', '0 2 1 * *', this.runMonthlyMaintenance.bind(this));
+    
+    // Weekly backup on Saturdays at 3 AM
+    this.scheduleTask('weeklyBackup', '0 3 * * 6', this.runWeeklyBackup.bind(this));
 
     this.isInitialized = true;
     logger.info('Task scheduler initialized with tasks', { 
@@ -242,6 +246,43 @@ class TaskScheduler {
       
     } catch (error) {
       logger.error('Monthly maintenance failed', { error: error.message });
+    }
+  }
+
+  // Weekly backup task
+  async runWeeklyBackup() {
+    logger.info('Running weekly backup');
+    
+    try {
+      const result = await backupService.createFullBackup();
+      logger.info('Weekly backup completed', {
+        backupName: result.backupName,
+        timestamp: result.timestamp
+      });
+      
+      // Send notification if configured
+      const recipients = process.env.NOTIFICATION_EMAILS?.split(',') || [];
+      if (recipients.length > 0) {
+        await notifications.notifySystemAlert(recipients, {
+          alertType: 'Weekly Backup Complete',
+          severity: 'INFO',
+          message: `Weekly system backup completed successfully: ${result.backupName}`,
+          timestamp: result.timestamp
+        });
+      }
+    } catch (error) {
+      logger.error('Weekly backup failed', { error: error.message });
+      
+      // Send failure notification
+      const recipients = process.env.NOTIFICATION_EMAILS?.split(',') || [];
+      if (recipients.length > 0) {
+        await notifications.notifySystemAlert(recipients, {
+          alertType: 'Weekly Backup Failed',
+          severity: 'ERROR',
+          message: `Weekly system backup failed: ${error.message}`,
+          timestamp: new Date().toISOString()
+        });
+      }
     }
   }
 
